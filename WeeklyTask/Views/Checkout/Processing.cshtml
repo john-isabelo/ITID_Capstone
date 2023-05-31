@@ -1,0 +1,59 @@
+﻿@model Tuple<CartViewModel,Order>
+
+@{
+    Layout = "_Layout";
+}
+
+@*<div class="text-center">
+    <form asp-action="Processing" asp-controller="Checkout" method="post">
+
+        <label class="text-info">Your Payment has been successfully processed</label>
+        <br />
+        <br />
+        <p class="blockquote text-center">
+            The details of the transaction are  <br />
+            Customer : @ViewBag.Customer <br /> <br />
+            Amount : $ @ViewBag.AmountPaid
+
+        </p>
+
+        @if (TempData.Peek("TotalAmount") != null)
+        {
+        var result = Convert.ToInt64(TempData.Peek("TotalAmount"));
+        result /= 100;
+        <h3>Amount: @result USD has been processed successfully.</h3>
+        }
+    </form>
+</div>*@
+
+<div class="text-center">
+    <form asp-action="Processing" asp-controller="Checkout" method="post">
+
+        <label class="text-info">Your Payment has been successfully processed</label>
+        <br />
+        <br />
+        <h3>Order Details:</h3>
+        <p>The details of the transaction are </p>       
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <p>Customer : @Model.Item2.GuestEmail </p>
+        }
+        else
+        {
+            <p>Customer : @User.Identity.Name </p>
+        }
+        <p>Amount : $ @ViewBag.AmountPaid</p>    
+        <p>Order Method: @Model.Item2.Description</p>
+        <p>Delivery Address: @Model.Item2.DeliveryAddress</p>
+        <p>Customer Phone: @Model.Item2.CustomerPhone</p>
+        <h3>Food list:</h3>
+        <ul>
+            @foreach (var item in Model.Item1.CartItems)
+            {
+              <li>@item.Quantity x @item.ProductName - $@item.Price each</li>
+            }
+        </ul>
+
+        <button type="button" class="btn btn-secondary" id="send-email-btn">Send Email</button>
+    </form>
+</div>

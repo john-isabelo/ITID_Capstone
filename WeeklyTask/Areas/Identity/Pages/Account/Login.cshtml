@@ -1,0 +1,56 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<div class="container py-1 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-secondary bg-gradient  text-white" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+                    <form id="account" method="post">
+                        <div class="mb-md-5 mt-md-2 pb-2">
+
+                            <h2 class="fw-bold mb-2 text-uppercase">@ViewData["Title"]</h2>
+                            <p class="text-white-50 mb-5">Please enter your login and password!</p>
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-outline form-white mb-4">
+                                <input asp-for="Input.Email" autocomplete="username" aria-required="true" class="form-control form-control-lg" />
+                                <label class="form-label" asp-for="Input.Email">Email</label>
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline form-white mb-4">
+                                <input asp-for="Input.Password" autocomplete="current-password" aria-required="true" class="form-control form-control-lg" />
+                                <label class="form-label" asp-for="Input.Password">Password</label>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            <div>
+                                <div class="checkbox">
+                                    <label asp-for="Input.RememberMe" class="form-label">
+                                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                    </label>
+                                </div>
+                            </div>
+                            <p class="small mb-5 pb-lg-2"><a class="text-white-50" asp-page="./ForgotPassword">Forgot password?</a></p>
+
+                            <button id="login-submit" class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                        </div>
+                        <div mt-0>
+                            <p class="mb-0">
+                                Don't have an account? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-white-50 fw-bold">Sign Up</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

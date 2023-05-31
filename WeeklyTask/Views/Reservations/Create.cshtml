@@ -1,0 +1,163 @@
+﻿@model WeeklyTask.Models.Reservation
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Reservation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="booking-form" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ReservationDate" class="control-label"></label>
+                <input asp-for="ReservationDate" class="form-control" />
+                <span asp-validation-for="ReservationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PartySize" class="control-label"></label>
+                <input asp-for="PartySize" class="form-control" />
+                <span asp-validation-for="PartySize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label"></label>
+                <textarea asp-for="Notes" class="form-control"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactName" class="control-label"></label>
+                <input asp-for="ContactName" class="form-control" />
+                <span asp-validation-for="ContactName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactPhone" class="control-label"></label>
+                <input asp-for="ContactPhone" class="form-control" />
+                <span asp-validation-for="ContactPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <button type="button" id="clear-form" class="btn btn-secondary">Clear Form</button>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- Add the modal element -->
+<div id="booking-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Booking Complete</h2>
+        <p>Your booking has been successfully submitted!</p>
+        <p>For changes and cancellation, please contact the admin at <a href="mailto:admin@example.com">admin@example.com</a>.</p>
+    </div>
+</div>
+
+<!-- Add the CSS styles for the modal -->
+<style>
+    .modal {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+</style>
+
+<!-- Add the JavaScript code for handling form submission -->
+<script>
+    document.getElementById("clear-form").addEventListener("click", function () {
+        const form = document.getElementById("booking-form");
+        form.reset();
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const bookingForm = document.querySelector("#booking-form");
+
+        if (bookingForm) {
+            bookingForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                // Prepare the data from the form
+                const formData = new FormData(event.target);
+
+                // Send the data to the server using AJAX
+                fetch("/Reservations/Create", {
+                    method: "POST",
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Error submitting the form');
+                        }
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            // Show the booking complete modal
+                            const modal = document.querySelector("#booking-modal");
+                            const closeButton = document.querySelector(".close");
+
+                            modal.style.display = "block";
+
+                            closeButton.onclick = function () {
+                                modal.style.display = "none";
+                            };
+
+                            window.onclick = function (event) {
+                                if (event.target == modal) {
+                                    modal.style.display = "none";
+                                }
+                            };
+                        } else {
+                            // Handle errors, e.g., show an error message
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+            console.log("Event listener attached.");
+        } else {
+            console.error("Form not found.");
+        }
+    });
+</script>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

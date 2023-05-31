@@ -1,0 +1,76 @@
+﻿@using Microsoft.Extensions.Options
+@using WeeklyTask.Models.Helpers;
+@model Tuple<CartViewModel,Order>
+@inject IOptions<StripeSettings> Stripe
+@inject IOptions<StripeSettings> _stripeSettings
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_Layout";
+}
+
+@section scripts {
+    <script>
+        $(function () {          
+
+            // Show or hide the delivery address input based on the selected option
+            $('#description-select').change(function () {
+                if ($(this).val() === 'Delivery') {
+                    $('#delivery-address-container').show();
+                } else {
+                    $('#delivery-address-container').hide();
+                }
+            });
+        });
+    </script>
+}
+
+<div class="text-center-form">
+    <form asp-action="Processing" asp-controller="Checkout" method="post" class="form-checkout">
+        <article>
+            <label>Amount: @Model.Item1.GrandTotal</label>
+        </article>
+        
+         @if (!User.Identity.IsAuthenticated)
+        {
+            <div>
+                <label asp-for="Item2.GuestEmail"></label>
+                <input asp-for="Item2.GuestEmail" class="form-control" name="GuestEmail" />
+                <span asp-validation-for="Item2.GuestEmail" class="text-danger"></span>
+            </div>
+        }
+        <div>
+    <label>Pickup/Delivery</label>
+        <select asp-for="Item2.Description" class="form-control" name="description" id="description-select">
+            <option value="Delivery">Delivery</option>
+            <option value="Pickup">Pickup</option>
+        </select>
+    </div>
+    <div id="delivery-address-container">
+        <label asp-for="Item2.DeliveryAddress"></label>
+        <input asp-for="Item2.DeliveryAddress" class="form-control" name="deliveryAddress" />
+        <span asp-validation-for="Item2.DeliveryAddress" class="text-danger"></span>
+    </div>
+
+        <div>
+            <label asp-for="Item2.CustomerPhone" ></label>
+            <input asp-for="Item2.CustomerPhone" type="tel" id="phone" name="customerPhone" pattern="[0-9]{10}" class="form-control" />
+            <span asp-validation-for="Item2.CustomerPhone" class="text-danger"></span>
+        </div>
+
+        <script src="//checkout.stripe.com/v2/checkout.js"
+                class="stripe-button"
+                data-key="@Stripe.Value.PublishableKey"
+                data-amount="@ViewBag.DollarAmount"
+                data-name="[Yummy]"
+                data-locale="en"
+                data-description="Sample charge"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-zip-code="true">
+        </script>
+    </form>
+</div>
+
+
+
+

@@ -1,0 +1,60 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container py-1 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-secondary bg-gradient  text-white" style="border-radius: 1rem;">
+                <div class="card-body p-5 text-center">
+                    <form d="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                        <div class="mb-md-5 mt-md-2 pb-2">
+
+                            <h2 class="fw-bold mb-2 text-uppercase">@ViewData["Title"]</h2>
+                            <p class="text-white-50 mb-5">Create a new account.</p>
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-outline form-white mb-4">
+                                <input asp-for="Input.FirstName" class="form-control" autocomplete="firstname" aria-required="true" />
+                                <label class="form-label" asp-for="Input.FirstName">First Name</label>
+                                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline form-white mb-4">
+                                <input asp-for="Input.LastName" autocomplete="lastname" aria-required="true" class="form-control form-control-lg" />
+                                <label class="form-label" asp-for="Input.LastName">Last Name</label>
+                                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="form-outline form-white mb-4">
+                                <input asp-for="Input.Email" autocomplete="username" aria-required="true" class="form-control form-control-lg" />
+                                <label class="form-label" asp-for="Input.Email">Email</label>
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline form-white mb-4">
+                                <input asp-for="Input.Password" autocomplete="new-password" aria-required="true" class="form-control form-control-lg" />
+                                <label class="form-label" asp-for="Input.Password">Password</label>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-outline form-white mb-4">
+                                <input asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" class="form-control form-control-lg" />
+                                <label class="form-label" asp-for="Input.ConfirmPassword">Password</label>
+                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            </div>
+
+                            <button id="registerSubmit" class="btn btn-outline-light btn-lg px-5" type="submit">Register</button>
+                        </div>                    
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
